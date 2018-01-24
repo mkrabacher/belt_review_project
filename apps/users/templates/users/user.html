@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{user.name}}</title>
+</head>
+
+<body>
+    <div style="text-align:right">
+        <a href="/books">Hoooooome!</a> ||
+        <a href="/logout">Logout</a>
+    </div>
+
+    <h2>{{user.username}}'s page</h2>
+    <p>name: {{user.first_name}} {{user.last_name}}</p>
+    <p>email: {{user.email}}</p>
+    <p>total reviews: {{user_count}}</p>
+
+    <div style="display:inline-block; max-width:60%">
+        <h2>{{user.first_name}}'s Reviews:</h2>
+        {%for review in user.reviews_given.all%}
+        <div style="border-top:5px solid black">
+            <p>Rating: {{review.rating}} stars</p>
+            <p><a href="/users/{{review.reviewer.id}}">{{review.reviewer.first_name}}</a> says: {{review.content}}</p>
+            <p>posted on {{review.date_added}}</p>
+            {%if review.reviewer.id == request.session.curr_user_id%}
+            <form action="/books/delReview" method="post">
+                {%csrf_token%}
+                <input type="hidden" name="book_id" value="{{review.book.id}}">
+                <input type="hidden" name="rev_id" value="{{review.id}}">
+                <input type="submit" value="Delete Review">
+            </form>
+            {%endif%}
+        </div>
+        {%endfor%}
+    </div>
+
+</body>
+
+</html>

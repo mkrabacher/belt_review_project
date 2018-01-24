@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{book.name}}</title>
+</head>
+
+<body>
+    <div style="text-align:right">
+        <a href="/books">Hoooooome!</a> ||
+        <a href="/logout">Logout</a>
+    </div>
+
+    <h2>{{book.title}}</h2>
+    <h4>Author:{{book.author.name}}</h4>
+
+    <div style="display:inline-block; max-width:60%">
+        <h2>Reviews:</h2>
+        {%for review in book.reviews.all%}
+        <div style="border-top:5px solid black">
+            <p>Rating: {{review.rating}} stars</p>
+            <p><a href="/users/{{review.reviewer.id}}">{{review.reviewer.first_name}}</a> says: {{review.content}}</p>
+            <p>posted on {{review.date_added}}</p>
+            {%if review.reviewer.id == request.session.curr_user_id%}
+            <form action="/books/delReview" method="post">
+                {%csrf_token%}
+                <input type="hidden" name="book_id" value="{{review.book.id}}">
+                <input type="hidden" name="rev_id" value="{{review.id}}">
+                <input type="submit" value="Delete Review">
+            </form>
+            {%endif%}
+        </div>
+        {%endfor%}
+    </div>
+
+    <div style="display:inline-block; margin: 0 0 0 100px">
+        <form action="/books/createReview" method="post">
+            {%csrf_token%}
+            <input type="hidden" name="book_id" value="{{book.id}}">
+            <label for="review">Add a Review: <br>
+                <textarea name="review" cols="30" rows="10"></textarea><br>
+            <label for="rating">Rating:
+                <select name="rating">
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                    <option value="4">Four</option>
+                    <option value="5">Five</option>
+                </select>
+            </label><br><br>
+                <input type="submit" value="Submit Review">
+            </label>
+        </form>
+    </div>
+
+</body>
+
+</html>

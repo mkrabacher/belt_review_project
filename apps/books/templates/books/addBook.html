@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add a Book and Review</title>
+</head>
+<body>
+    <div style="text-align:right">
+        <a href="/books">Hoooooome!</a> ||
+        <a href="/logout">Logout</a>
+    </div><br><br>
+    <form action="/books/createBookReview" method="post">
+        {%csrf_token%}
+        <label for="bookTitle">Book Title:
+            <input type="text" name="bookTitle">
+        </label><br><br>
+        <label for="authorList">Author: <br>
+            {%if authors_num > 0%}
+            <text>Choose from the list: <select name="authorList">
+                <option disabled selected value> -- select an author -- </option>
+                {%for author in authors%}
+                <option value="{{author.name}}">{{author.name}}</option>
+                {%endfor%}
+            </select></text><br>
+            <text>Or add a new author: <input type="text" name="authorNew"></text>
+            {%else%}
+            <input type="text" name='authorNew'>
+            {%endif%}
+        </label><br><br>
+        <label for="review">Review:
+            <textarea name="review" cols="30" rows="10" placeholder="write your reveiw here"></textarea>
+        </label><br><br>
+        <label for="rating">Rating: 
+            <select name="rating">
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+                <option value="4">Four</option>
+                <option value="5">Five</option>
+            </select>
+        </label><br><br>
+        <input type="submit" value="Add Book and Review">
+    </form>
+</body>
+</html>
